@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1><img src="images/notes.png" >Notes</h1>
+        <button class="btn"><img src="images/edit.png" >Create Notes</button>
+        <div class="notes-container">
+            <!-- <p contenteditable="true" class="inputBox">
+                <img src="images/delete.png" >
+            </p> -->
+        </div>
+    </div>
+    
+    <script>
+        const noteContainer=document.querySelector(".notes-container");
+        const createBtn=document.querySelector(".btn");
+
+        function updateStorage(){
+            localStorage.setItem("notes",noteContainer.innerHTML);
+        }
+
+        //         function updateStorage() {
+        //     const notes = noteContainer.querySelectorAll(".inputBox");
+        //     const storedNotes = [];
+        //     notes.forEach((note) => {
+        //         storedNotes.push(note.innerHTML);
+        //     });
+        //     localStorage.setItem("notes", JSON.stringify(storedNotes));
+        // }
+
+        function showNotes(){
+            // let storedNotes = localStorage.getItem("notes");
+            // if(storedNotes){
+            //     noteContainer.innerHTML = storedNotes;
+            // }
+                noteContainer.innerHTML = localStorage.getItem("notes");
+        }
+
+            //         function showNotes() {
+            //     const storedNotes = JSON.parse(localStorage.getItem("notes"));
+            //     if (storedNotes) {
+            //         storedNotes.forEach((noteContent) => {
+            //             let inputBox = document.createElement("p");
+            //             let img = document.createElement("img");
+            //             inputBox.className = "inputBox";
+            //             inputBox.setAttribute("contenteditable", "true");
+            //             inputBox.innerHTML = noteContent;
+            //             img.src = "images/delete.png";
+            //             img.className = "delete-btn";
+            //             noteContainer.appendChild(inputBox).appendChild(img);
+            //         });
+            //     }
+            // }
+       
+        showNotes();
+
+        createBtn.addEventListener("click",()=>{
+            let inputBox =document.createElement("p");
+            let img =document.createElement("img");
+            inputBox.className ="inputBox";
+            inputBox.setAttribute("contenteditable","true");
+            img.src ="images/delete.png";
+            img.className = "delete-btn";
+            noteContainer.appendChild(inputBox).appendChild(img);
+            notes = document.querySelectorAll(".inputBox");
+        })
+
+        noteContainer.addEventListener("click",(e)=>{
+            if(e.target.classList.contains("delete-btn")){
+                e.target.parentElement.remove();
+                updateStorage();
+            } else if(e.target.tagName === "P"){
+                notes.forEach((note)=>{
+                    note.onkeyup = ()=>{
+                        updateStorage();
+                    }
+                })
+            }
+        })
+
+        document.addEventListener("keydown", (e)=>{
+            if(e.key === "Enter"){
+                document.execCommand("insertLineBreak");
+                e.preventDefault();
+            }
+        })
+
+    </script>
+</body>
+</html>
